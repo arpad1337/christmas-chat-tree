@@ -11,9 +11,6 @@ import { ServerStyleSheet, StyleSheetManager } from "styled-components";
 import { Helmet } from "react-helmet";
 import onesignalAppId from "../common/onesignalAppId";
 
-import { onesignalAppId } from "../common/parameters";
-
-
 const isDev = process.env.NODE_ENV === "development";
 
 
