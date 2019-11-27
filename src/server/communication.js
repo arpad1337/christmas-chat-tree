@@ -52,17 +52,6 @@ export default (app) => {
                 data
             })));
         });
-        
-        if (process.env.NODE_ENV === 'production') {
-            axios.post("/api/v1/notifications", {
-                app_id: onesignalAppId,
-                contents: {"en": data},
-                included_segments: ["All"]
-            }, {
-                "Content-Type": "application/json; charset=utf-8",
-                "Authorization": `Basic ${process.env.ONESIGNAL_API_KEY}`
-            });
-        }
     };
 
     app.post("/send-message", (req, res) => {
@@ -78,6 +67,16 @@ export default (app) => {
             id: nextMessageId,
             expiresIn: 1000 + message.length * 100,
         });
+        if (process.env.NODE_ENV === 'production') {
+            axios.post("https://onesignal.com/api/v1/notifications", {
+                app_id: onesignalAppId,
+                contents: {"en": message},
+                included_segments: ["All"]
+            }, {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": `Basic ${process.env.ONESIGNAL_API_KEY}`
+            });
+        }
         res.end();
     });
 
