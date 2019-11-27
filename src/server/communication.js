@@ -1,5 +1,5 @@
 const onesignalAppId = require('../common/onesignalAppId');
-const axios = require(axios);
+const axios = require('axios');
 
 const users = [];
 const streams = [];
