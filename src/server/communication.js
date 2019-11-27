@@ -1,3 +1,6 @@
+const onesignalAppId = require('../common/onesignalAppId');
+const axios = require(axios);
+
 const users = [];
 const streams = [];
 
@@ -49,6 +52,17 @@ export default (app) => {
                 data
             })));
         });
+        
+        if (process.env.NODE_ENV === 'production') {
+            axios.post("/api/v1/notifications", {
+                app_id: onesignalAppId,
+                contents: {"en": data},
+                included_segments: ["All"]
+            }, {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": `Basic ${process.env.ONESIGNAL_API_KEY}`
+            });
+        }
     };
 
     app.post("/send-message", (req, res) => {
