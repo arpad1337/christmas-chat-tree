@@ -43,8 +43,12 @@ export default (app) => {
     // TASK 2: communication
     // TASK 2C: broadcasting messages
     const sendMessage = data => {
-        // for each stream send a message with type message along with the data
-        // ...
+        streams.forEach(stream => {
+            stream.res.write(sse(JSON.stringify({
+                type: 'message',
+                data
+            })));
+        });
     };
 
     app.post("/send-message", (req, res) => {
@@ -66,14 +70,18 @@ export default (app) => {
 
     // TASK 2A: connect client to server
     app.get("/communication", async(req, res) => {
-        // set status to 200 and set the 2 required headers for a server-sent-event. Google it.
-        // ...
+        res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("Content-Type", "text/event-stream");
+        res.status(200);
         const id = nextStreamId;
-        // push the res along with the id to the streams in an object
-        // ...
+        streams.push({
+            id,
+            res
+        });
         nextStreamId++;
-        // send a welcome message to the client using the sse function. Stringify an object with the type connected. Use the write method.
-        // ...
+        res.write(sse(JSON.stringify({
+            type: "connected"
+        })))
         req.on("close", () => {
             streams.splice(streams.findIndex(stream => stream.id === id), 1);
         });
@@ -81,8 +89,12 @@ export default (app) => {
 
     // TASK 2B: resfreshing userlist
     const refreshUsers = () => {
-        // for each stream send a message with type users along with users as the data.
-        // ...
+        streams.forEach(stream => {
+            stream.res.write(sse(JSON.stringify({
+                type: 'users',
+                data: users
+            })));
+        });
     };
 };
 

@@ -24,6 +24,7 @@ export const startCommunication = () => async(dispatch, getState, api) => {
                     type: GET_USERS,
                     payload: data,
                 });
+                break;
             }
             // if message type is message dispatch a RECEIVE_MESSAGE type action with data as paylaod
             case "message": {
