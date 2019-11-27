@@ -11,7 +11,7 @@ import { ServerStyleSheet, StyleSheetManager } from "styled-components";
 import { Helmet } from "react-helmet";
 import onesignalAppId from "../common/onesignalAppId";
 
-// import { onesignalAppId } from "../common/parameters";
+import { onesignalAppId } from "../common/parameters";
 
 
 const isDev = process.env.NODE_ENV === "development";
@@ -62,6 +62,15 @@ export default async(req, store, context, res) => {
             <div id="notification-root"></div>
             ${!isDev ? `<script> window.INITIAL_STATE = ${serialize(store.getState())}</script>` : ""}
             <script src="/bundle.js"></script>
+            <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+            <script>
+            var OneSignal = window.OneSignal || [];
+            OneSignal.push(function() {
+                OneSignal.init({
+                    appId: "${onesignalAppId}",
+                });
+            });
+            </script>
         </body>
     </html>`;
     if (context.url) {
